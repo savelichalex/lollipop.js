@@ -1,0 +1,26 @@
+{
+  "name": "lollipop",
+  "version": "0.0.1",
+  "description": "Lollipop - it's modular JS framework to simple development web apps.",
+  "main": "lollipop.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/savelichalex/lollipop.js.git"
+  },
+  "keywords": [
+    "modular",
+    "framework"
+  ],
+  "author": "Alexey Savelyev",
+  "license": "MIT License",
+  "bugs": {
+    "url": "https://github.com/savelichalex/lollipop.js/issues"
+  },
+  "homepage": "https://github.com/savelichalex/lollipop.js",
+  "bin": {
+    "lollipop": "./index.js"
+  }
+}

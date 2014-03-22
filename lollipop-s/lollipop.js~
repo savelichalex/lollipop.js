@@ -191,7 +191,7 @@ function Router(callback) {
 			}
 			if(!match) {
 				//404
-				fs.readFile('public/404.html', function(err, data) {
+				fs.readFile('view/404.html', function(err, data) {
 					res.writeHead(404);
 					res.end(data);
 				});
@@ -304,11 +304,11 @@ function Controller(callback) {
 				} else {
 					var filename = filename || actionId;
 				}
-				var path = Lollipop.PATH + '/app/views/' + filename + '.html', //hardcode!!!
+				var path = 'view/' + filename + '.html', //hardcode!!!
 					template;
 				fs.readFile(path, function(err, data) {
 					if(err) {
-						res.end();
+						res.end(404);
 					} else {
 						template = parseTemplate(data, obj);
 						res.writeHead(200, {"Content-type": "text/html"});
