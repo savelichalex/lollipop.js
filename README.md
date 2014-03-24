@@ -8,7 +8,13 @@ Highlights of the framework:
 * Different modules with his own helpers
 
 You can download server version from npm:
+
 `npm install lollipop`
 
 To create new app just write in terminal:
-`lollipop new <your_app_name>` 
+
+`lollipop new <your_app_name>`
+
+To start server just write in folder:
+
+`lollipop start`

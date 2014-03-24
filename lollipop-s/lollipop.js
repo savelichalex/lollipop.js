@@ -178,13 +178,14 @@ function Router(callback) {
 	that.server = (function() {
 		http.createServer(function(req, res) {
 			var pathname = url.parse(req.url).pathname,
-				i, match = false, params = [];
+				i, match = false, params = [], handle;
 			for(i in routes) {
 				if(routes.hasOwnProperty(i)) {
 					//regexp must be correct ->
 					if(routes[i].regexp.test(pathname) || pathname === i) {
 						match = true;
-						params = pathname.slice(i.length).split('/');
+						handle = i.replace(/\:[a-zA-Z0-9]+\/?/g, '');
+						params = pathname.slice(handle.length).split('/');
 						mediator.callAction(routes[i].controller, routes[i].action, params, res);
 					}
 				}
@@ -204,7 +205,8 @@ function Router(callback) {
 			var actions = [], params = [],
 				len, i, handle,
 				callback_params,
-				params_str;
+				params_str,
+				handle_str;
 
 			if(/[^\w\d\/\:\_]+/.test(uri)) {
 				throw new Error("not valid uri");
@@ -217,11 +219,9 @@ function Router(callback) {
 				len = actions.length;
 				while(len--) {
 					if(actions[len].indexOf(':') === 0) {
-						params.push(actions[len]);
 						actions.slice(len, 1);
 					}
 				}
-
 				handle = '/'+actions.join('/');
 			}
 
@@ -238,20 +238,14 @@ function Router(callback) {
 			}
 
 			//regexp string to action parametrs
-			len = params.length;
-			if(len = 0) {
-				params_str = '';
-			} else {
-				for(i = 0; i < len; i += 1) {
-					params_str += '\/[\\w\\d\_]+';
-				}
-			}
+			handle_str = handle;
+			handle_str = handle_str.replace(/\:[a-zA-Z0-9]+/g, '[\\w\\d\_]+').replace(/\//g, '\\/');
 			
 			routes[handle] = {
 				controller: callback_params[0],
 				action: callback_params[1],
 				params: params,
-				regexp: new RegExp("^/"+handle.replace('/', '\/')+params_str+'$')
+				regexp: new RegExp("^" + handle_str +'$')
 			}
 		}
 	};

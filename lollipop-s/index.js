@@ -30,6 +30,10 @@ index = {
 			var package_file = fs.openSync('package.json', 'w');
 			fs.writeSync(package_file, package_text);
 
+			var conf_text = "{\n\t\"name\": \"" + app_name + "\"\n}";
+			var conf_file = fs.openSync('config/conf.json', 'w');
+			fs.writeSync(conf_file, conf_text);
+
 			var router_text = "var Lollipop = require('lollipop');\n\nLollipop.Router(function() {\n\tthis.route(\"/\", \"main#index\");\n});";
 			var router_file = fs.openSync('app/router.js', 'w');
 			fs.writeSync(router_file, router_text);
@@ -48,12 +52,57 @@ index = {
 
 			console.log(app_name + " app create.");
 		} catch(e) {
-			console.log("Something wrong" + e);
+			console.log("Something wrong " + e);
 		}		
-	}
+	},
+	start: function() {
+		try {
+			var path = process.cwd(), path_local,
+				config = fs.readFileSync(path + '/config/conf.json');
+			config = JSON.parse(config);
+
+			var Lollipop = require('./lollipop.js'),
+				modules = config.modules,
+				modules_ = {},
+				controllers = config.controllers,
+				controllers_ = {},
+				models = config.models,
+				models_ = {},
+				i;
+
+			if(modules) {
+				for(i in modules) {
+					if(modules.hasOwnProperty(i)) {
+						modules_[i] = require(path+'/app/modules/'+modules[i]);
+					}
+				}
+			}
+			if(controllers) {
+				for(i in controllers) {
+					if(controllers.hasOwnProperty(i)) {
+						controllers_[i] = require(path+'/app/controllers/'+controllers[i]);
+					}
+				}
+			}
+			if(models) {
+				for(i in models) {
+					if(models.hasOwnProperty(i)) {
+						models_[i] = require(path+'/app/models/'+models[i]);
+					}
+				}
+			}
+			router = require(path+'/app/router.js');
+			
+			Lollipop.PATH = path;
+			Lollipop.Core.startAll();
+		} catch(e) {
+			console.log("Something wrong " + e);
+		}
+	},
 };
 
 switch(source) {
 	case '-v': index.version(); break;
 	case 'new': index.newApp(); break;
+	case 'start': index.start(); break;
 }
