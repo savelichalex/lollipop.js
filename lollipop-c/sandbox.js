@@ -140,7 +140,9 @@ function Widget() {
 			arr = context.ViewModel.subscribers[element],
 			i, len;
 
-		callback.call(el, publication);
+		if(callback) {
+			callback.call(el, publication);
+		}
 
 		if(arr && arr.length !== 0) {
 			for(i = 0, len = arr.length; i<len; i += 1) {
@@ -156,8 +158,10 @@ function Widget() {
 			viewModel = {},
 			Model = {},
 			View = {},
+			Collection = [],
+			partialView,
 			renderTemplate,
-			template_regexp = /(\{\{(\w\d+)\}\})/g,
+			template_regexp = /\{\{([0-9a-zA-Z_]+)\}\}/g,
 			setViewElements;
 
 		if(Object.prototype.toString.call(obj) !== "[object Object]") {
@@ -166,15 +170,22 @@ function Widget() {
 
 		renderTemplate = function(text, model) {
 			text = text.replace(template_regexp, function() {
-				var entry = Array.prototype.slice.call(arguments)[2],
-					val = model.get(entry);
+				var entry = Array.prototype.slice.call(arguments)[1];
+				if(entry === 'collection') {
+					var len = Collection.length, col_str = '';
+					while(len--) {
+						col_str += renderTemplate(partialView, obj.Collection.next());
+					}
+					obj.Collection.reset();
+					return col_str;
+				}
+				var val = model.get(entry);
 				if(val) {
 					return val;
 				} else {
 					return '';
 				}
 			});
-
 			return text;
 		};
 
@@ -184,7 +195,7 @@ function Widget() {
 
 			els = wrap.getElementsByTagName('*');
 			for(i = 0, len = els.length; i < len; i += 1) {
-				elems[els[i].id] = els[i];
+				elems[els[i].getAttribute('data-id')] = els[i];
 			}
 			for(i in View) {
 				if(View.hasOwnProperty(i)) {
@@ -210,12 +221,12 @@ function Widget() {
 			},
 			render: function() {
 				if(template) {
-					container.innerHTML += template;
+					container.innerHTML = template;
 					setViewElements(container, true);
 				} else {
 					setViewElements(container);
 				}
-			}
+			},
 		};
 		obj.ViewModel = {
 			get: function(p) {
@@ -313,19 +324,91 @@ function Widget() {
 				}
 				this.ajax.post(data.join('&'), this.url, context, success, error);
 			},
+			toObj: function() {
+				return Model;
+			},
 			url: null,
 			ajax: Sandbox.modules.ajax,
 		};
 
-		for(prop in scop) {
-			if(scop.hasOwnProperty(prop)) {
-				var property = scop[prop];
+		obj.Collection = (function() {
+			var index = -1,
+				add, next, reset, 
+				isExist, partial;
 
-				View[prop] = null;
-				if(property !== undefined && property !== null) {
-					Model[prop] = property;
+			add = function(model) {
+				var temp_model, i, 
+					len = model.length, prop, object;
+
+				if(Object.prototype.toString.call(model) === "[object Array]") {
+					for(i = 0; i < len; i += 1) {
+						temp_model = {};
+						for(prop in model[i]) {
+							object = model[i];
+							if(object.hasOwnProperty(prop)) {
+								if(object[prop] !== undefined && object[prop] !== null) {
+									temp_model[prop] = object[prop];
+								}
+							}
+						}
+						Collection.push(temp_model);
+					}
+				} else if(Object.prototype.toString.call(model) === "[object Object]") {
+					temp_model = {};
+					for(prop in model) {
+						if(model.hasOwnProperty(prop)) {
+							if(model[prop] !== undefined && model[prop] !== null) {
+								temp_model[prop] = model[prop];
+							}
+						}
+					}
+					Collection.push(temp_model);
+				} else {
+					throw new TypeError();
 				}
-				
+				return this;
+			};
+			next = function() {
+				index += 1;
+				return {
+					get: function(prop) {
+						return Collection[index][prop];
+					}
+				};
+			};
+			reset = function() {
+				index = -1;
+				return this;
+			};
+			isExist = function() {
+				return Collection.length !== 0;
+			};
+			partial = function(p) {
+				partialView = p;
+				return this;
+			};
+
+			return {
+				add: add,
+				next: next,
+				reset: reset,
+				isExist: isExist,
+				partial: partial
+			}
+		}());
+
+		if(Object.prototype.toString.call(scop) === "[object Array]") {
+			obj.Collection.add(scop);
+		} else {
+			for(prop in scop) {
+				if(scop.hasOwnProperty(prop)) {
+					var property = scop[prop];
+
+					View[prop] = null;
+					if(property !== undefined && property !== null) {
+						Model[prop] = property;
+					}
+				}
 			}
 		}
 
