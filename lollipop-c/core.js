@@ -23,6 +23,7 @@ Lollipop.Core = (function() {
 			switch(m.type) {
 				case 'widget': m.instance = Widget(moduleId, m.deps, m.creator); break;
 				case 'module': m.instance = Module(moduleId, m.deps, m.creator); break;
+				case 'router': m.instance = Router(moduleId, m.deps, m.creator); break;
 			}
 		}
 	};
@@ -78,6 +79,18 @@ Lollipop.Module = function() {
 			moduleId = args.shift(),
 			deps = (args[0] && typeof args[0] === 'string') ? args : ['*'],
 			type = 'module',
+			core = Lollipop.Core;
+
+	core.register(moduleId, type, deps, creator);
+};
+
+Lollipop.Router = function() {
+	'use strict';
+	var args = Array.prototype.slice.call(arguments),
+			creator = args.pop(),
+			moduleId = 'router',
+			deps = (args[0] && typeof args[0] === 'string') ? args : ['*'],
+			type = 'router',
 			core = Lollipop.Core;
 
 	core.register(moduleId, type, deps, creator);

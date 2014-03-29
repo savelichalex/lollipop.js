@@ -281,8 +281,18 @@ function Widget() {
 		};
 		obj.Model = {
 			set: function(p, v) {
-				Model[p] = v;
-				publish(p, v, obj);
+				if(Object.prototype.toString.call(p) === "[object Object]") {
+					Model = {};
+					for(var prop in p) {
+						if(p.hasOwnProperty(prop)) {
+							this.set(prop, p[prop]);
+						}
+					}
+					console.log(Model);
+				} else {
+					Model[p] = v;
+					publish(p, v, obj);
+				}
 			},
 			get: function(p) {
 				var value;
@@ -334,7 +344,8 @@ function Widget() {
 		obj.Collection = (function() {
 			var index = -1,
 				add, next, reset, 
-				isExist, partial;
+				isExist, partial,
+				find;
 
 			add = function(model) {
 				var temp_model, i, 
@@ -387,13 +398,23 @@ function Widget() {
 				partialView = p;
 				return this;
 			};
+			find = function(prop, val) {
+				var len = Collection.length;
+				while(len--) {
+					if(Collection[len][prop] && Collection[len][prop] === val) {
+						return Collection[len];
+					}
+				}
+				return false;
+			};
 
 			return {
 				add: add,
 				next: next,
 				reset: reset,
 				isExist: isExist,
-				partial: partial
+				partial: partial,
+				find: find
 			}
 		}());
 
@@ -429,6 +450,87 @@ function Module() {
 	that.helper = function() {
 		return "This is helper";
 	};
+
+	return new Sandbox(name, modules, that, callback);
+}
+
+function Router() {
+	'use strict';
+	var args = Array.prototype.slice.call(arguments),
+		callback = args.pop(),
+		name = args.shift(),
+		modules = (args[0] && typeof args[0] === 'string') ? args : args[0],
+		that = {},
+		Handlers = [],
+		initialize,
+		routeHandler,
+		hasHistory = !!window.history;
+
+	routeHandler = function(e) {
+		if(!hasHistory) {
+			var hash = e;
+		} else {
+			var e = e || window.event,
+				hash = window.location.hash;
+			e.preventDefault();
+		}
+
+		var url = hash.slice(2), 
+			len = Handlers.length,
+			handler, static_part,
+			params;
+
+		while(len--) {
+			if(Handlers[len].regexp.test(url)) {
+				handler = Handlers[len];
+				static_part = (handler.regexp + "/").replace('/[a-zA-Z0-9]+', '').replace('/^', '').replace('$/', '');
+				params = url.slice(static_part.length).split('/');
+				handler.callback.apply(that, params);
+				return;
+			}
+		}
+	};
+
+	initialize = (function() {
+		if(hasHistory) {
+			window.addEventListener('hashchange', routeHandler, false);
+		} else {
+			var oldHash = window.location.hash;
+			setInterval(function() {
+				var hash = window.location.hash;
+				if(hash !== oldHash) {
+					routeHandler(hash);
+					oldHash = hash;
+				}
+			}, 50);
+		}
+	}());
+
+	that.route = function(uri, callback) {
+		var params = uri.split('/'),
+			len = params.length,
+			params_number = 0, named_params_str = '';
+
+		while(len--) {
+			if(params[len].indexOf(':') === 0) {
+				params.splice(len, 1);
+				params_number += 1;
+			}
+		}
+
+		if(params_number) {
+			while(params_number--) {
+				named_params_str += '/[a-zA-Z0-9]+'
+			}
+		}
+
+		uri = new RegExp('^' + params.join('\/') + named_params_str + '$')
+		console.log(uri);
+		Handlers.push({
+			callback: callback,
+			regexp: uri
+		});
+	}
 
 	return new Sandbox(name, modules, that, callback);
 }
