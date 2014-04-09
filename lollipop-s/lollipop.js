@@ -2,6 +2,10 @@ var Lollipop = {},
 	http = require('http'),
 	url = require('url'),
 	fs = require('fs'),
+	q = require('./promise.js'),
+	pubsub = require('./pubsub.js'),
+	mediator = require('./mediator.js'),
+	server = require('./server.js'),
 	MongoClient = require('mongodb').MongoClient,
 	Server = require('mongodb').Server;
 
@@ -41,8 +45,8 @@ Lollipop.Core = (function() {
 		switch(m.type) {
 			case 'module': m.instance = Module(m.callback); break;
 			case 'router': m.instance = Router(m.callback); break;
-			case 'controller': m.instance = Controller(m.callback); break;
-			case 'model': m.instance = Model(m.callback); break;
+			case 'controller': m.instance = Controller(moduleId, m.callback); break;
+			case 'model': m.instance = Model(moduleId, m.callback); break;
 		}
 	};
 	startAll = function() {
@@ -62,69 +66,7 @@ Lollipop.Core = (function() {
 	}
 }());
 
-Lollipop.Mediator = (function() {
-	'use strict';
-	var modules = Lollipop.Core.modules,
-		callMethod, newModel, callAction,
-		subscribers,
-		subscribe,
-		unsubscribe,
-		publish;
-
-	callAction = function(moduleId, action, args, res) {
-		modules[moduleId].instance.callAction(action, args, res);
-	};
-
-	subscribers =  {
-		any: []
-	};
-
-	subscribe = function(target, type) {
-		type = type || 'any';
-		if(typeof this.subscribers[type] === 'undefined') {
-			this.subscribers[type] = [];
-		}
-		this.subscribers[type].push({
-			id: target.name,
-			callback: target.callback,
-		});
-	},
-
-	unsubscribe = function(id) {
-		var i, len, prop;
-
-		for(i in subscribers) {
-			if(subscribers.hasOwnProperty(i)) {
-				prop = subscribers[i];
-				len = prop.length;
-
-				while(len--) {
-					if(prop[len].id === id) {
-						prop.splice(len, 1);
-					}
-				}
-			}
-		}
-	},
-
-	publish = function(publication, type) {
-		var type = type || 'any',
-			subscribers = this.subscribers[type],
-			i = subscribers.length;
-
-		while(i--) {
-			subscribers[i].callback(publication);
-		}
-	}
-
-	return {
-		callAction: callAction,
-		subscribers: subscribers, //del in prod
-		subscribe: subscribe,
-		unsubscribe: unsubscribe,
-		publish: publish,
-	}
-}());
+Lollipop.Mediator = mediator;
 
 function Sandbox(that, callback) {
 	'use strict';
@@ -135,12 +77,9 @@ function Sandbox(that, callback) {
 		console.log(message);
 	};
 
-	that.subscribe = function(type, fn) {
-		var target = {
-			callback: fn,
-		};
-
-		mediator.subscribe(target, type);
+	that.subscribe = function(type) {
+		//target???
+		mediator.subscribe(type);
 	};
 
 	that.publish = function(type, publication) {
@@ -175,30 +114,7 @@ function Router(callback) {
 		routes = {},
 		mediator = Lollipop.Mediator;
 
-	that.server = (function() {
-		http.createServer(function(req, res) {
-			var pathname = url.parse(req.url).pathname,
-				i, match = false, params = [], handle;
-			for(i in routes) {
-				if(routes.hasOwnProperty(i)) {
-					//regexp must be correct ->
-					if(routes[i].regexp.test(pathname) || pathname === i) {
-						match = true;
-						handle = i.replace(/\:[a-zA-Z0-9]+\/?/g, '');
-						params = pathname.slice(handle.length).split('/');
-						mediator.callAction(routes[i].controller, routes[i].action, params, res);
-					}
-				}
-			}
-			if(!match) {
-				//404
-				fs.readFile('public/404.html', function(err, data) {
-					res.writeHead(404);
-					res.end(data);
-				});
-			}
-		}).listen(PORT);
-	}());
+	that.server = server;
 
 	that.routes = {
 		add: function(uri, callback) {
@@ -254,7 +170,7 @@ function Router(callback) {
 	Sandbox(that, callback);
 }
 
-function Controller(callback) {
+function Controller(name, callback) {
 	'use strict';
 
 	if(!(this instanceof Controller)) {
@@ -267,6 +183,16 @@ function Controller(callback) {
 
 	that.setAction = function(actionId, callback) {
 		actions[actionId] = callback;
+	};
+
+	that.callMethod = function(moduleId, method, callback) {
+		var type = moduleId + ':' + method,
+			start = type + '_start',
+			stop = type + '_stop';
+
+		this.publish(start, null);
+		this.subscribe(stop)
+			.then(callback);
 	};
 
 	parseTemplate = function(data, obj) {
@@ -322,7 +248,7 @@ function Controller(callback) {
 	Sandbox(that, callback);
 }
 
-function Model(callback) {
+function Model(name, callback) {
 	'use strict';
 	if(!(this instanceof Model)) {
 		return new Model(callback);
@@ -333,8 +259,25 @@ function Model(callback) {
 		mongo, db,
 		collection;
 
-	that.setMethod = function(methodId, callback) {
-		methods[methodId] = callback;
+	that.setMethod = function(methodId) {
+		var type = name + ':' + methodId,
+			start = type + '_start',
+			stop = type + '_stop',
+			self = this,
+			defer = q.deferred();
+
+		this.subscribe(start)
+			.then(function() {
+				defer.resolve();
+			});
+
+		defer.promise.stop = function() {
+			this.then(function(res) {
+				self.publish(stop, res);
+			});
+		};
+
+		return defer.promise;
 	};
 
 	that.NewMongoConnection = function(host, PORT) {

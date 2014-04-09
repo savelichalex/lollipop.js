@@ -1,0 +1,60 @@
+var q = require('./promise.js');
+
+'use strict';
+
+var Pubsub = function(context) {
+	var context = context || null,
+		that = Object.create(Pubsub.prototype);
+
+	that.subscribers = {
+		any: []
+	};
+	that.context = context;
+
+	return that;
+};
+
+Pubsub.prototype = {
+	subscribe: function(type) {
+		var type = type || 'any',
+			defer = q.deferred(this.context);
+		if(typeof this.subscribers[type] === 'undefined') {
+			this.subscribers[type] = [];
+		}
+		this.subscribers[type].push(defer);
+		return defer.promise;
+	},
+
+	unsubscribe: function(id) {
+		var i, len, prop,
+			subscribers = this.subscribers;
+		for(i in subscribers) {
+			if(subscribers.hasOwnProperty(i)) {
+				prop = subscribers[i];
+				len = prop.length;
+
+				while(len--) {
+					if(prop[len].id === id) {
+						prop.splice(len, 1);
+					}
+				}
+			}
+		}
+	},
+
+	publish: function(publication, type) {
+		var type = type || 'any',
+			subscribers = this.subscribers[type],
+			i, len = subscribers.length;
+
+		for(i = 0; i < len; i += 1) {
+			if(typeof publication === "function") {
+				subscribers[i].resolve(publication());
+			} else {
+				subscribers[i].resolve(publication);
+			}
+		}
+	}
+};
+
+module.exports = Pubsub;
