@@ -60,9 +60,17 @@ Promise.prototype = {
 			if(res instanceof Promise) {
 				obj.defer.bind(res);
 			} else {
-				obj.defer.resolve(res);
+				if(obj.defer) {
+					obj.defer.resolve(res);
+				}
 			}
 		}, result);
+	},
+	deferred: function(callback) {
+		this.fulfilled.push({
+			fn: callback,
+			defer: void 0
+		});
 	},
 	toString: function() {
 		return '[object Promise]';
@@ -127,7 +135,8 @@ Promisify = function(asyncFn, context) {
 
 queue = {
 	deferred: Deferred,
-	promisify: Promisify
+	promisify: Promisify,
+	promise: Promise
 }
 
 module.exports = queue;

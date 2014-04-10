@@ -43,6 +43,8 @@ Pubsub.prototype = {
 	},
 
 	publish: function(publication, type) {
+		if(!this.subscribers[type]) return false;
+
 		var type = type || 'any',
 			subscribers = this.subscribers[type],
 			i, len = subscribers.length;

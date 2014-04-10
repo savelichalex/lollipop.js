@@ -56,7 +56,6 @@ index = {
 		}		
 	},
 	start: function() {
-		try {
 			var path = process.cwd(), path_local,
 				config = fs.readFileSync(path + '/config/conf.json');
 			config = JSON.parse(config);
@@ -95,9 +94,6 @@ index = {
 			
 			Lollipop.PATH = path;
 			Lollipop.Core.startAll();
-		} catch(e) {
-			console.log("Something wrong " + e);
-		}
 	},
 };
 

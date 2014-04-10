@@ -5,7 +5,6 @@ var Lollipop = {},
 	q = require('./promise.js'),
 	pubsub = require('./pubsub.js'),
 	mediator = require('./mediator.js'),
-	server = require('./server.js'),
 	MongoClient = require('mongodb').MongoClient,
 	Server = require('mongodb').Server;
 
@@ -66,7 +65,7 @@ Lollipop.Core = (function() {
 	}
 }());
 
-Lollipop.Mediator = mediator;
+Lollipop.Mediator = mediator(Lollipop.Core);
 
 function Sandbox(that, callback) {
 	'use strict';
@@ -79,7 +78,7 @@ function Sandbox(that, callback) {
 
 	that.subscribe = function(type) {
 		//target???
-		mediator.subscribe(type);
+		return mediator.subscribe(type);
 	};
 
 	that.publish = function(type, publication) {
@@ -109,12 +108,10 @@ function Router(callback) {
 	}
 
 	var that = {},
-		server,
-		PORT = +process.env.PORT || +that.PORT || 1337,
 		routes = {},
+		server = require('./server.js')(Lollipop.Mediator),
+		Server,
 		mediator = Lollipop.Mediator;
-
-	that.server = server;
 
 	that.routes = {
 		add: function(uri, callback) {
@@ -155,7 +152,7 @@ function Router(callback) {
 
 			//regexp string to action parametrs
 			handle_str = handle;
-			handle_str = handle_str.replace(/\:[a-zA-Z0-9]+/g, '[\\w\\d\_]+').replace(/\//g, '\\/');
+			handle_str = handle_str.replace(/\:[a-zA-Z0-9]+/g, '([\\w\\d\_]+)').replace(/\//g, '\\/');
 			
 			routes[handle] = {
 				controller: callback_params[0],
@@ -167,6 +164,10 @@ function Router(callback) {
 	};
 	that.route = that.routes.add;
 
+	that.startServer = function() {
+		Server = server(routes);
+	}
+
 	Sandbox(that, callback);
 }
 
@@ -174,7 +175,7 @@ function Controller(name, callback) {
 	'use strict';
 
 	if(!(this instanceof Controller)) {
-		return new Controller(callback);
+		return new Controller(name, callback);
 	}
 
 	var that = {}, actions = {},
@@ -251,13 +252,14 @@ function Controller(name, callback) {
 function Model(name, callback) {
 	'use strict';
 	if(!(this instanceof Model)) {
-		return new Model(callback);
+		return new Model(name, callback);
 	}
 
 	var that = {},
 		methods = {},
 		mongo, db,
-		collection;
+		collection,
+		connection;
 
 	that.setMethod = function(methodId) {
 		var type = name + ':' + methodId,
@@ -265,14 +267,18 @@ function Model(name, callback) {
 			stop = type + '_stop',
 			self = this,
 			defer = q.deferred();
-
+		
 		this.subscribe(start)
 			.then(function() {
 				defer.resolve();
 			});
 
-		defer.promise.stop = function() {
+		q.promise.prototype.end = function() {
 			this.then(function(res) {
+				if(connection) {
+					connection.close();
+					connection = void 0;
+				}
 				self.publish(stop, res);
 			});
 		};
@@ -280,7 +286,7 @@ function Model(name, callback) {
 		return defer.promise;
 	};
 
-	that.NewMongoConnection = function(host, PORT) {
+	that.newMongoConnection = function(host, PORT) {
 		var PORT = PORT || 27017;
 		mongo = new MongoClient(new Server(host, PORT), {native_parser: true});
 		return {
@@ -295,19 +301,85 @@ function Model(name, callback) {
 		}
 	};
 
-	that.MongoQuery = function(action, query, callback) {
-		if(!mongo) throw "Mongo don't connect to server";
-		if(!db) throw "Db don't found";
-		if(!collection) throw "Collection don't found";
-		mongo.open(function(err, mongo) {
-			switch(action) {
-				case 'find': collection.find(query, callback); break;
-				case 'findOne': collection.findOne(query, callback); break;
-				case 'update': collection.update(query, callback); break;
-				case 'insert': collection.insert(query, callback); break;
-			};
-			that.mongo = mongo;
-		});
+	/*
+		if(!mongo) return new Error("Mongo don't connect to server");
+		if(!db) return new Error("Db don't found");
+		if(!collection) return new Error("Collection don't found"); */
+
+	q.promise.prototype.mongoConnect = function() {
+		var defer = q.deferred(),
+		callback = function() {
+			mongo.open(function(err, connect) {
+				connection = connect;
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve();
+				}
+			});
+		}
+		this.deferred(callback);
+		return defer.promise;
+	};
+
+	q.promise.prototype.findOne = function(query) {
+		var defer = q.deferred(),
+		callback = function() {
+			collection.findOne(query, function(err, data) {
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve(data);
+				}
+			});
+		}
+		this.deferred(callback);
+		return defer.promise;
+	};
+
+	q.promise.prototype.find = function(query) {
+		var defer = q.deferred(),
+		callback = function() {
+			collection.find(query, function(err, data) {
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve(data);
+				}
+			});
+		}
+		this.deferred(callback);
+		return defer.promise;
+	};
+
+	q.promise.prototype.update = function(query) {
+		var defer = q.deferred(),
+		callback = function() {
+			collection.update(query, function(err, data) {
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve(data);
+				}
+			});
+		}
+		this.deferred(callback);
+		return defer.promise;
+	};
+
+	q.promise.prototype.insert = function(query) {
+		var defer = q.deferred(),
+		callback = function() {
+			collection.insert(query, function(err, data) {
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve(data);
+				}
+			});
+		}
+		this.deferred(callback);
+		return defer.promise;
 	};
 
 	Sandbox(that, callback);

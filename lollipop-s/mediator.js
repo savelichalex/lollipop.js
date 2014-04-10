@@ -1,20 +1,19 @@
-var Core = require('./core.js'),
-	Pubsub = require('./pubsub.js'),
+module.exports = (function(core) {
+var Pubsub = require('./pubsub.js'),
 	Mediator;
 
 //Mediator is the link between modules and core.
 //Implements Pub-sub pattern for communication between modules.
 //Have some auxiliary functions for async implementation of MVC pattern.
-Mediator = function() {
+Mediator = (function() {
 	'use strict';
-	var modules = Core.modules,
+	var modules = core.modules,
 		pubsub = new Pubsub(), 
 		callAction,
 		subscribers,
 		subscribe,
 		unsubscribe,
 		publish;
-
 	//The callAction needed to call action in controller (implementation of MVC)
 	//TODO: change it to pub-sub
 	callAction = function(moduleId, action, args, res) {
@@ -26,7 +25,11 @@ Mediator = function() {
 		subscribe: pubsub.subscribe,
 		unsubscribe: pubsub.unsubscribe,
 		publish: pubsub.publish,
+		subscribers: {
+			any: []
+		}
 	}
-};
+}());
 
-module.exports = Mediator;
+return Mediator;
+});

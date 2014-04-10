@@ -1,19 +1,19 @@
+module.exports = (function(mediator) {
 var Server, 
 	onGet, onPost, onPut, onDelete,
 	noHandler,
-	PORT = +process.env.PORT || +that.PORT || 1337,
-	routes = {},
+	PORT = +process.env.PORT || 1337,
 	http = require('http'),
-	fs = require('fs'),
-	mediator = require('./mediator.js'); //!!!
+	url = require('url'),
+	fs = require('fs');
 
 /* REST API functions */
-onGet = function(req, res, params) {
-	mediator.callAction(routes[i].controller, routes[i].action, params, res);
+onGet = function(req, res, route, params) {
+	mediator.callAction(route.controller, route.action, params, res);
 };
 
-onPost = function(req, res, params) {
-
+onPost = function(req, res, route, params) {
+	mediator.callAction(route.controller, route.action, params, res);
 };
 
 onPut = function(req, res) {
@@ -66,7 +66,7 @@ noHandler = function(res, pathname) {
 };
 
 
-Server = function() {
+Server = function(routes) {
 	http.createServer(function(req, res) {
 		var pathname = url.parse(req.url).pathname,
 			i, 
@@ -74,18 +74,18 @@ Server = function() {
 			params = [], handle,
 			postData = "", fileName,
 			http_method;
-
+		
 		for(i in routes) {
 			if(routes.hasOwnProperty(i)) {
 				if(routes[i].regexp.test(pathname) || pathname === i) {
 					match = true;
 					params = pathname.match(routes[i].regexp).splice(1); //new named parameters
-
+					
 					http_method = req.method;
 					if(http_method === 'GET') {
-						onGet(req, res, params);
+						onGet(req, res, routes[i], params);
 					} else if(http_method === 'POST') {
-						onPost(req, res, params);
+						onPost(req, res, routes[i], params);
 					} else if(http_method === 'PUT') {
 						onPut(req, res);
 					} else if(http_method === 'DELETE') {
@@ -112,4 +112,6 @@ Server = function() {
 	}).listen(PORT);
 };
 
-module.exports = Server;
+return Server;
+
+});
