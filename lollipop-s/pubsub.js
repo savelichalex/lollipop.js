@@ -1,6 +1,7 @@
-var q = require('./promise.js');
-
+/* jshint node: true */
+module.exports = (function() {
 'use strict';
+var q = require('./promise.js');
 
 var Pubsub = function(context) {
 	var context = context || null,
@@ -50,7 +51,7 @@ Pubsub.prototype = {
 			i, len = subscribers.length;
 
 		for(i = 0; i < len; i += 1) {
-			if(typeof publication === "function") {
+			if(typeof publication === 'function') {
 				subscribers[i].resolve(publication());
 			} else {
 				subscribers[i].resolve(publication);
@@ -59,4 +60,5 @@ Pubsub.prototype = {
 	}
 };
 
-module.exports = Pubsub;
+return Pubsub;
+}());

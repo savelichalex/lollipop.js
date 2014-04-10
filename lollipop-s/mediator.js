@@ -1,4 +1,6 @@
-module.exports = (function(core) {
+/* jshint node: true */
+module.exports = (function() {
+'use strict';
 var Pubsub = require('./pubsub.js'),
 	Mediator;
 
@@ -6,22 +8,9 @@ var Pubsub = require('./pubsub.js'),
 //Implements Pub-sub pattern for communication between modules.
 //Have some auxiliary functions for async implementation of MVC pattern.
 Mediator = (function() {
-	'use strict';
-	var modules = core.modules,
-		pubsub = new Pubsub(), 
-		callAction,
-		subscribers,
-		subscribe,
-		unsubscribe,
-		publish;
-	//The callAction needed to call action in controller (implementation of MVC)
-	//TODO: change it to pub-sub
-	callAction = function(moduleId, action, args, res) {
-		modules[moduleId].instance.callAction(action, args, res);
-	};
+	var pubsub = new Pubsub();
 
 	return {
-		callAction: callAction,
 		subscribe: pubsub.subscribe,
 		unsubscribe: pubsub.unsubscribe,
 		publish: pubsub.publish,

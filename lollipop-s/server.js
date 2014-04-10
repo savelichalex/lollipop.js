@@ -1,19 +1,29 @@
+/* jshint node: true */
 module.exports = (function(mediator) {
+'use strict';
 var Server, 
 	onGet, onPost, onPut, onDelete,
+	callAction,
 	noHandler,
 	PORT = +process.env.PORT || 1337,
 	http = require('http'),
 	url = require('url'),
 	fs = require('fs');
 
+callAction = function(controller, action, params, res) {
+	var type = controller + ':' + action,
+		start = type + '_start';
+	
+	mediator.publish([params, res], start);
+}
+
 /* REST API functions */
 onGet = function(req, res, route, params) {
-	mediator.callAction(route.controller, route.action, params, res);
+	callAction(route.controller, route.action, params, res);
 };
 
 onPost = function(req, res, route, params) {
-	mediator.callAction(route.controller, route.action, params, res);
+	callAction(route.controller, route.action, params, res);
 };
 
 onPut = function(req, res) {
@@ -29,32 +39,33 @@ noHandler = function(res, pathname) {
 	var tmp = pathname.lastIndexOf('.'),
 		extension = pathname.substring(tmp + 1),
 		mimes = {
-			"css": "text/css",
-			"js": "text/javascript",
-			"html": "text/html",
-			"png": "image/png",
-			"jpg": "image/jpeg",
-			"jpeg": "image/jpeg",
-			"eot": "application/vnd.ms-fontobject",
-			"ttf": "application/octet-stream",
-			"woff": "application/octet-stream",
-			"svg": "image/svg+xml"
+			'css': 'text/css',
+			'js': 'text/javascript',
+			'html': 'text/html',
+			'png': 'image/png',
+			'jpg': 'image/jpeg',
+			'jpeg': 'image/jpeg',
+			'eot': 'application/vnd.ms-fontobject',
+			'ttf': 'application/octet-stream',
+			'woff': 'application/octet-stream',
+			'svg': 'image/svg+xml'
 		},
 		file_path, key, file_path;
+
 		for(key in mimes) {
 		if(mimes.hasOwnProperty(key)) {
 			if(key === extension) {
-				file_path = "." + pathname;
+				file_path = '.' + pathname;
 			}
 		}
 	}
 	if(file_path) {
 		fs.readFile(file_path, function(err, data) {
 			if (err) {
-				res.writeHead(500, {"Content-type": "text/plain"});
-				res.end("500: Internal Server Error");
+				res.writeHead(500, {'Content-type': 'text/plain'});
+				res.end('500: Internal Server Error');
 			}
-			res.writeHead(200, {"Content-type": mimes[extension]});
+			res.writeHead(200, {'Content-type': mimes[extension]});
 			res.end(data);
 		});
 	} else {
@@ -71,8 +82,8 @@ Server = function(routes) {
 		var pathname = url.parse(req.url).pathname,
 			i, 
 			match = false, //need to check route match
-			params = [], handle,
-			postData = "", fileName,
+			params = [],
+			fileName,
 			http_method;
 		
 		for(i in routes) {
@@ -80,7 +91,7 @@ Server = function(routes) {
 				if(routes[i].regexp.test(pathname) || pathname === i) {
 					match = true;
 					params = pathname.match(routes[i].regexp).splice(1); //new named parameters
-					
+
 					http_method = req.method;
 					if(http_method === 'GET') {
 						onGet(req, res, routes[i], params);

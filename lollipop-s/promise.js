@@ -1,10 +1,12 @@
+/* jshint node: true */
+module.exports = (function() {
+'use strict';
 var Deferred, Promise,
 	Promisify,
-	promise, defer,
 	setImmediate;
 
 //shim
-if(typeof setImmediate !== "function") {
+if(typeof setImmediate !== 'function') {
 	setImmediate = function(fn, data) {
 		process.nextTick(function() {
 			fn(data);
@@ -12,11 +14,12 @@ if(typeof setImmediate !== "function") {
 	}
 }
 
-Promise = function() {
+Promise = function(context) {
 	var promise = Object.create(Promise.prototype);
 
 	promise.fulfilled = [];
 	promise.rejected = [];
+	promise.context = context;
 
 	return promise;
 };
@@ -28,7 +31,7 @@ Promise.prototype = {
 	error: null,
 	context: null,
 	then: function(fulfill, reject) {
-		var defer = Deferred();
+		var defer = new Deferred();
 		this.fulfilled.push({
 			fn: fulfill,
 			defer: defer
@@ -42,7 +45,7 @@ Promise.prototype = {
 
 		if(this.status === 'resolved') {
 			this.execute({
-				fn: fulfilled,
+				fn: fulfill,
 				defer: defer
 			}, this.data);
 		} else if(this.status === 'rejected') {
@@ -55,8 +58,9 @@ Promise.prototype = {
 		return defer.promise;
 	},
 	execute: function(obj, result) {
+		var that = this;
 		setImmediate(function() {
-			var res = obj.fn.call(this.context, result);
+			var res = obj.fn.call(that.context, result);
 			if(res instanceof Promise) {
 				obj.defer.bind(res);
 			} else {
@@ -80,7 +84,7 @@ Promise.prototype = {
 Deferred = function(context) {
 	var defer = Object.create(Deferred.prototype);
 
-	defer.promise = Promise();
+	defer.promise = new Promise(context);
 	defer.promise.context = context || null;
 
 	return defer;
@@ -116,7 +120,7 @@ Deferred.prototype = {
 
 Promisify = function(asyncFn, context) {
 	return function() {
-		var defer = Deferred(),
+		var defer = new Deferred(),
 			args = Array.prototype.slice.call(arguments);
 
 		args.push(function(err, val) {
@@ -133,10 +137,9 @@ Promisify = function(asyncFn, context) {
 	}
 };
 
-queue = {
+return {
 	deferred: Deferred,
 	promisify: Promisify,
 	promise: Promise
-}
-
-module.exports = queue;
+};
+}());
