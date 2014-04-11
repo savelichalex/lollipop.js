@@ -56,7 +56,7 @@ return function Model(name, callback) {
 		if(!mongo) return new Error("Mongo don't connect to server");
 		if(!db) return new Error("Db don't found");
 		if(!collection) return new Error("Collection don't found"); */
-
+	//TODO: mongo errors while connect
 	q.promise.prototype.mongoConnect = function() {
 		var defer = q.deferred(),
 		callback = function() {
