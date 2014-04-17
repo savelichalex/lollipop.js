@@ -35,6 +35,14 @@ return function Sandbox(that, callback) {
 		mediator.publish(publication, type);
 	};
 
+	/**
+	 * Unsubscribe all subscribers
+	 * @param {String} type of publication
+	 */
+	that.unsubscribe = function(type) {
+		mediator.unsubscribe(type);
+	};
+
 	callback.call(that);
 };
 };

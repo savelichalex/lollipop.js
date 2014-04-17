@@ -31,13 +31,8 @@ Pubsub.prototype = {
 			subscribers = this.subscribers;
 		for(i in subscribers) {
 			if(subscribers.hasOwnProperty(i)) {
-				prop = subscribers[i];
-				len = prop.length;
-
-				while(len--) {
-					if(prop[len].id === id) {
-						prop.splice(len, 1);
-					}
+				if(i === id) {
+					subscribers[i] = [];
 				}
 			}
 		}

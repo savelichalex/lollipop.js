@@ -13,7 +13,7 @@ var Server,
 callAction = function(controller, action, params, res) {
 	var type = controller + ':' + action,
 		start = type + '_start';
-	
+
 	mediator.publish([params, res], start);
 }
 
@@ -23,11 +23,13 @@ onGet = function(req, res, route, params) {
 };
 
 onPost = function(req, res, route, params) {
+	params.push(req);
 	callAction(route.controller, route.action, params, res);
 };
 
 onPut = function(req, res) {
-	//TODO: put
+	params.push(req);
+	callAction(route.controller, route.action, params, res);
 };
 
 onDelete = function(req, res) {
@@ -98,22 +100,10 @@ Server = function(routes) {
 					} else if(http_method === 'POST') {
 						onPost(req, res, routes[i], params);
 					} else if(http_method === 'PUT') {
-						onPut(req, res);
+						onPut(req, res, routes[i], params);
 					} else if(http_method === 'DELETE') {
 						onDelete(req, res);
-					}
-
-					if(req.method === 'POST') {
-						if(req.headers['content-type']) {
-							fileName = new Date().getTime() + '.' + req.headers['content-type'].split('/')[1];
-							var file = fs.createWriteStream('app/static/images/'+fileName);
-							req.pipe(file);
-							params.push(fileName);
-						} else {
-							req.onend = function(data) { console.log(data); }; //save form data
-						}
-					}
-					
+					}					
 				}
 			}
 		}

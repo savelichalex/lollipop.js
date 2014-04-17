@@ -74,10 +74,10 @@ return function Controller(name, callback) {
 
 		this.subscribe(start)
 			.then(function() {
-				var args = Array.prototype.slice.call(arguments[0]);
+				var args = Array.prototype.slice.call(arguments);
 				var res = args.pop();
 				defer.promise.context = actionContext = obj(res, actionId);
-				defer.resolve(args);
+				defer.resolve(args[0]);
 			});
 
 		return defer.promise;
@@ -96,13 +96,14 @@ return function Controller(name, callback) {
 			stop = type + '_stop',
 			defer = q.deferred(),
 		callback = function() {
-			that.publish(start, null);
-			that.subscribe(stop)
-				.then(function(data) {
-					defer.promise.context = actionContext;
-					defer.resolve(data);
-				});
-		}
+			var args = Array.prototype.slice.call(arguments);
+			that.publish(start, args);
+		};
+		that.subscribe(stop)
+			.then(function(data) {
+				defer.promise.context = actionContext;
+				defer.resolve(data);
+			});
 		this.deferred(callback);
 		return defer.promise;
 	};

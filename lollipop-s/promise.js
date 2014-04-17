@@ -60,7 +60,12 @@ Promise.prototype = {
 	execute: function(obj, result) {
 		var that = this;
 		setImmediate(function() {
-			var res = obj.fn.call(that.context, result);
+			if(Object.prototype.toString.call(result) !== "[object Array]") {
+				var tempArray = [];
+				tempArray.push(result)
+				result = tempArray;
+			}
+			var res = obj.fn.apply(that.context, result);
 			if(res instanceof Promise) {
 				obj.defer.bind(res);
 			} else {

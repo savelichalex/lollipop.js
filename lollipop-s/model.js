@@ -21,7 +21,8 @@ return function Model(name, callback) {
 		
 		this.subscribe(start)
 			.then(function() {
-				defer.resolve();
+				var args = Array.prototype.slice.call(arguments);
+				defer.resolve(args[0]);
 			});
 
 		q.promise.prototype.end = function() {
@@ -60,12 +61,13 @@ return function Model(name, callback) {
 	q.promise.prototype.mongoConnect = function() {
 		var defer = q.deferred(),
 		callback = function() {
+			var args = Array.prototype.slice.call(arguments);
 			mongo.open(function(err, connect) {
 				connection = connect;
 				if(err) {
 					defer.reject(err);
 				} else {
-					defer.resolve();
+					defer.resolve(args);
 				}
 			});
 		};
@@ -76,6 +78,10 @@ return function Model(name, callback) {
 	q.promise.prototype.findOne = function(query) {
 		var defer = q.deferred(),
 		callback = function() {
+			var args = Array.prototype.slice.call(arguments);
+			if(typeof query === "function") {
+				query = query.apply(null, args); //TODO: need context
+			} 
 			collection.findOne(query, function(err, data) {
 				if(err) {
 					defer.reject(err);
