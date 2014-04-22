@@ -33,7 +33,7 @@ Lollipop.Model = function(moduleId, callback) {
 
 Lollipop.Mediator = mediator();
 
-Sandbox = sandbox(Lollipop.Mediator);
+Sandbox = sandbox(Lollipop.Mediator, q);
 
 Module = module(Sandbox);
 

@@ -32,6 +32,12 @@ return function Model(name, callback) {
 					connection = void 0;
 				}
 				self.publish(stop, res);
+			}, function(err) {
+				if(connection) {
+					connection.close();
+					connection = void 0;
+				}
+				self.publish(stop, err);
 			});
 		};
 
@@ -80,9 +86,9 @@ return function Model(name, callback) {
 		callback = function() {
 			var args = Array.prototype.slice.call(arguments);
 			if(typeof query === "function") {
-				query = query.apply(null, args); //TODO: need context
+				var _query = query.apply(null, args); //TODO: need context
 			} 
-			collection.findOne(query, function(err, data) {
+			collection.findOne(_query, function(err, data) {
 				if(err) {
 					defer.reject(err);
 				} else {
@@ -97,11 +103,15 @@ return function Model(name, callback) {
 	q.promise.prototype.find = function(query) {
 		var defer = q.deferred(),
 		callback = function() {
-			collection.find(query, function(err, data) {
+			var args = Array.prototype.slice.call(arguments);
+			if(typeof query === "function") {
+				var _query = query.apply(null, args); //TODO: need context
+			} 
+			collection.find(_query, function(err, cursor) {
 				if(err) {
 					defer.reject(err);
 				} else {
-					defer.resolve(data);
+					defer.resolve(cursor);
 				}
 			});
 		};
@@ -109,14 +119,24 @@ return function Model(name, callback) {
 		return defer.promise;
 	};
 
-	q.promise.prototype.update = function(query) {
+	q.promise.prototype.update = function(desired, replaceble, options) {
 		var defer = q.deferred(),
 		callback = function() {
-			collection.update(query, function(err, data) {
+			var args = Array.prototype.slice.call(arguments),
+				_query,
+				_desired, _replaceble,
+				_options = options || {};
+			if(typeof desired === "function") {
+				_query = desired.apply(null, args); //TODO: need context
+				_desired = _query[0];
+				_replaceble = _query[1];
+				_options = _query[2] || {};
+			}
+			collection.update(_desired, _replaceble, _options, function(err, data, updated) {
 				if(err) {
 					defer.reject(err);
 				} else {
-					defer.resolve(data);
+					defer.resolve([data, updated]);
 				}
 			});
 		};
@@ -127,7 +147,30 @@ return function Model(name, callback) {
 	q.promise.prototype.insert = function(query) {
 		var defer = q.deferred(),
 		callback = function() {
-			collection.insert(query, function(err, data) {
+			var args = Array.prototype.slice.call(arguments);
+			if(typeof query === "function") {
+				var _query = query.apply(null, args); //TODO: need context
+			} 
+			collection.insert(_query, function(err, data) {
+				if(err) {
+					defer.reject(err);
+				} else {
+					defer.resolve(data);
+				}
+			});
+		};
+		this.deferred(callback);
+		return defer.promise;
+	};
+
+	q.promise.prototype.remove = function(query) {
+		var defer = q.deferred(),
+		callback = function() {
+			var args = Array.prototype.slice.call(arguments);
+			if(typeof query === "function") {
+				var _query = query.apply(null, args); //TODO: need context
+			}
+			collection.remove(_query, function(err, data) {
 				if(err) {
 					defer.reject(err);
 				} else {

@@ -1,5 +1,5 @@
 /* jshint node: true */
-module.exports = function(Mediator) {
+module.exports = function(Mediator, q) {
 'use strict';
 /**
  * Sandbox it's part of every module, which add some basic functionality, 
@@ -42,6 +42,8 @@ return function Sandbox(that, callback) {
 	that.unsubscribe = function(type) {
 		mediator.unsubscribe(type);
 	};
+
+	that.Deferred = q.deferred;
 
 	callback.call(that);
 };

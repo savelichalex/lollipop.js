@@ -19,6 +19,7 @@ callAction = function(controller, action, params, res) {
 
 /* REST API functions */
 onGet = function(req, res, route, params) {
+	params.push(req);
 	callAction(route.controller, route.action, params, res);
 };
 
@@ -93,7 +94,7 @@ Server = function(routes) {
 				if(routes[i].regexp.test(pathname) || pathname === i) {
 					match = true;
 					params = pathname.match(routes[i].regexp).splice(1); //new named parameters
-
+					
 					http_method = req.method;
 					if(http_method === 'GET') {
 						onGet(req, res, routes[i], params);

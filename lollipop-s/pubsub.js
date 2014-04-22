@@ -44,7 +44,6 @@ Pubsub.prototype = {
 		var type = type || 'any',
 			subscribers = this.subscribers[type],
 			i, len = subscribers.length;
-
 		for(i = 0; i < len; i += 1) {
 			if(typeof publication === 'function') {
 				subscribers[i].resolve(publication());
