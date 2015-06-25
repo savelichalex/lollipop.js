@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var fs = require('fs'),
-	version = '0.0.1',
+	version = '0.0.2',
 	index,
 	source = process.argv.splice(2, 1)[0],
 	app_name = process.argv.splice(2, 1)[0];
@@ -30,15 +30,15 @@ index = {
 			var package_file = fs.openSync('package.json', 'w');
 			fs.writeSync(package_file, package_text);
 
-			var conf_text = "{\n\t\"name\": \"" + app_name + "\"\n}";
+			var conf_text = "{\n\t\"name\": \"" + app_name + "\"\n\t\"controllers\": {\n\t\t\"main\": \"main.js\"\n\t}\n}";
 			var conf_file = fs.openSync('config/conf.json', 'w');
 			fs.writeSync(conf_file, conf_text);
 
-			var router_text = "var Lollipop = require('lollipop');\n\nLollipop.Router(function() {\n\tthis.route(\"/\", \"main#index\");\n});";
+			var router_text = "var Lollipop = require('lollipop');\n\nLollipop.Router(function() {\n\tthis.route(\"/\", \"main#index\");\n\n\tthis.startServer();\n});";
 			var router_file = fs.openSync('app/router.js', 'w');
 			fs.writeSync(router_file, router_text);
 
-			var controller_text = "var Lollipop = require('lollipop');\n\nLollipop.Controller('main', function() {\n\tthis.setAction('index', function() {\n\t\tthis.render();\n\t});\n});";
+			var controller_text = "var Lollipop = require('lollipop');\n\nLollipop.Controller('main', function() {\n\tthis.setAction('index')\n\t\t.then(function($) {\n\t\t\t$.render();\n\t\t});\n});";
 			var controller_file = fs.openSync('app/controllers/main.js', 'w');
 			fs.writeSync(controller_file, controller_text);
 
@@ -67,6 +67,8 @@ index = {
 				controllers_ = {},
 				models = config.models,
 				models_ = {},
+				router,
+				moduleQueryManadger,
 				i;
 
 			if(modules) {
@@ -91,14 +93,17 @@ index = {
 				}
 			}
 			router = require(path+'/app/router.js');
+			moduleQueryManadger = require('./moduleQueryManadger.js');
 			
 			Lollipop.PATH = path;
 			Lollipop.Core.startAll();
 	},
+	path: function() { console.log(process.cwd()); },
 };
 
 switch(source) {
 	case '-v': index.version(); break;
 	case 'new': index.newApp(); break;
 	case 'start': index.start(); break;
+	case '-p': index.path(); break;
 }

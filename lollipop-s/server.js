@@ -11,10 +11,8 @@ var Server,
 	fs = require('fs');
 
 callAction = function(controller, action, params, res) {
-	var type = controller + ':' + action,
-		start = type + '_start';
-
-	mediator.publish([params, res], start);
+	var type = controller + ':' + action;
+	mediator.publish(type, [params, res]);
 }
 
 /* REST API functions */
@@ -88,7 +86,6 @@ Server = function(routes) {
 			params = [],
 			fileName,
 			http_method;
-		
 		for(i in routes) {
 			if(routes.hasOwnProperty(i)) {
 				if(routes[i].regexp.test(pathname) || pathname === i) {
@@ -112,6 +109,7 @@ Server = function(routes) {
 			noHandler(res, pathname);
 		}
 	}).listen(PORT);
+	console.log('server listen on port: ' + PORT);
 };
 
 return Server;

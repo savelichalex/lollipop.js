@@ -31,7 +31,7 @@ Lollipop.Model = function(moduleId, callback) {
 	Lollipop.Core.register('model', moduleId, callback);
 };
 
-Lollipop.Mediator = mediator();
+Lollipop.Mediator = mediator;
 
 Sandbox = sandbox(Lollipop.Mediator, q);
 

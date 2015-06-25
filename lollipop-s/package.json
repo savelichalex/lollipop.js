@@ -1,6 +1,6 @@
 {
   "name": "lollipop",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "description": "Lollipop - it's modular JS framework to simple development web apps.",
   "main": "lollipop.js",
   "scripts": {

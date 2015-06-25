@@ -1,12 +1,17 @@
 /* jshint node: true */
 module.exports = function(Sandbox) {
-return function Module(callback) {
+'use strict';
+var utils = require('./utils.js');
+
+function Module(callback) {
 	if(!(this instanceof Module)) {
 		return new Module(callback);
 	}
 
-	var that = {};
-
-	Sandbox(that, callback);
+	this.callSuper(callback);
 };
+
+Module.extends(Sandbox);
+
+return Module;
 };

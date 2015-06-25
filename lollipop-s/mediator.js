@@ -2,23 +2,22 @@
 module.exports = (function() {
 'use strict';
 var Pubsub = require('./pubsub.js'),
-	Mediator;
+	util = require('./utils.js'),
+	Mediator, 
+	currentMediator;
 
 //Mediator is the link between modules and core.
-//Implements Pub-sub pattern for communication between modules.
+//Extends Pub-sub pattern for communication between modules.
 //Have some auxiliary functions for async implementation of MVC pattern.
-Mediator = (function() {
-	var pubsub = new Pubsub();
+Mediator = function() {
+	this.callSuper(); //TODO: parent constructor must be calling
+};
 
-	return {
-		subscribe: pubsub.subscribe,
-		unsubscribe: pubsub.unsubscribe,
-		publish: pubsub.publish,
-		subscribers: {
-			any: []
-		}
-	}
+Mediator.extends(Pubsub);
+
+//Mediator is singleton
+if(currentMediator === void 0)
+	return currentMediator = new Mediator();
+else
+	return currentMediator;
 }());
-
-return Mediator;
-});

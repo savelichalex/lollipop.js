@@ -1,5 +1,5 @@
 /* jshint node: true */
-module.exports = function(Mediator, q) {
+module.exports = function(mediator) {
 'use strict';
 /**
  * Sandbox it's part of every module, which add some basic functionality, 
@@ -7,23 +7,29 @@ module.exports = function(Mediator, q) {
  * @param {that} modules context
  * @param {callback} modules body
  */
-return function Sandbox(that, callback) {
-	var that = that || {},
-		mediator = Mediator;
+var Sandbox = function(cb) {
+	cb.call(this);
+}
 
-	that.log = function(message) {
+Sandbox.prototype = {
+	constructor: Sandbox,
+
+	/**
+	 * Incapsulate log method
+	 * @param {message} what you want to log
+	 */
+	log: function(message) {
 		console.log(message);
-	};
+	},
 
 	/**
 	 * Subscribe method use mediator to communication with other modules.
 	 * This method return Promise.
 	 * @param {type}
-	 * @return {Promise}
 	 */
-	that.subscribe = function(type) {
-		return mediator.subscribe(type);
-	};
+	subscribe: function(type, cb) {
+		mediator.subscribe(type, cb);
+	},
 
 	/**
 	 * This method publish new message to every subscribers.
@@ -31,20 +37,18 @@ return function Sandbox(that, callback) {
 	 * @param {type} publication type
 	 * @param {publication} message body
 	 */
-	that.publish = function(type, publication) {
-		mediator.publish(publication, type);
-	};
+	publish: function(type, publication) {
+		mediator.publish(type, publication);
+	},
 
 	/**
 	 * Unsubscribe all subscribers
 	 * @param {String} type of publication
 	 */
-	that.unsubscribe = function(type) {
+	unsubscribe: function(type) {
 		mediator.unsubscribe(type);
-	};
-
-	that.Deferred = q.deferred;
-
-	callback.call(that);
+	}
 };
+
+return Sandbox
 };

@@ -1,6 +1,10 @@
 /* jshint node: true */
 module.exports = function(Sandbox, Lollipop) {
 'use strict';
+var utils = require('./utils.js'),
+	PromiseWrapper = require('./promiseWrapper.js'),
+	Promise = require('./promise.js'),
+	fs = require('fs');
 /**
  * Controller this is link beetwen Model and View.
  * Add some function to module context, like setAction.
@@ -9,17 +13,14 @@ module.exports = function(Sandbox, Lollipop) {
  * @param {name} String; aka moduleId
  * @param {callback} Function; module body
  */
-return function Controller(name, callback) {
+function Controller(name, callback) {
 	if(!(this instanceof Controller)) {
 		return new Controller(name, callback);
 	}
 
-	var that = {}, 
-		actions = {},
+	var actions = {},
 		parseTemplate,
-		fs = require('fs'),
-		q = require('./promise.js'),
-		actionContext,
+		self = this,
 		//actions context
 		obj = function(res, actionId) {
 			return {
@@ -64,23 +65,21 @@ return function Controller(name, callback) {
 	 * Set new action to controller.
 	 * Subscribe to start event from server.
 	 * @param {actionId} String; needed to right routing
-	 * @return Promise
+	 * @return PromiseWrapper
 	 */
-	that.setAction = function(actionId) {
+	this.setAction = function(actionId) {
 		var type = name + ':' + actionId,
-			start = type + '_start';
-		
-		var defer = q.deferred();
+			wrapper = new PromiseWrapper();
 
-		this.subscribe(start)
-			.then(function() {
+		this.subscribe(type, function() {
 				var args = Array.prototype.slice.call(arguments);
 				var res = args.pop();
-				defer.promise.context = actionContext = obj(res, actionId);
-				defer.resolve(args[0]);
-			});
+				wrapper.accept(new Promise(function(resolve) {
+					resolve([obj(res, actionId), args[0]]);
+				})); 
+		});
 
-		return defer.promise;
+		return wrapper;
 	};
 
 	/**
@@ -88,24 +87,40 @@ return function Controller(name, callback) {
 	 * Use promise to allow cascade style.
 	 * @param {moduleId} String
 	 * @param {method} String
-	 * @return Promise
+	 * @return PromiseWrapper
 	 */
-	q.promise.prototype.callMethod = function(moduleId, method) {
-		var type = moduleId + ':' + method,
-			start = type + '_start',
-			stop = type + '_stop',
-			defer = q.deferred(),
-		callback = function() {
-			var args = Array.prototype.slice.call(arguments);
-			that.publish(start, args);
-		};
-		that.subscribe(stop)
-			.then(function(data) {
-				defer.promise.context = actionContext;
-				defer.resolve(data);
+	PromiseWrapper.prototype.callMethod = function(moduleId, method) {
+		var _methodAnswer;
+
+		return this.then(function() {
+			var args = Array.prototype.slice.call(arguments),
+				context = args.shift(),
+				args = args.pop(),
+				data = args[0],
+				res = args[1];
+
+			return new Promise(function(resolve, reject) {
+				_methodAnswer = function(data) {
+					resolve([context, data]);
+				}
+				self.publish('callModel', {
+					model: moduleId,
+					method: method,
+					cb: _methodAnswer,
+					data: data,
+					res: res
+				});
 			});
-		this.deferred(callback);
-		return defer.promise;
+		});
+
+		/*return new PromiseWrapper(this.promise.then(function() {
+			that.publish('callMethod', args); //call ModelQueryManadger <-
+			var context = args.shift(); //                               |
+			return that.subscribe(stop) // -------------------------------
+						.then(function(data) {
+							return [context, data];
+						});
+		})); */
 	};
 
 	/**
@@ -134,6 +149,10 @@ return function Controller(name, callback) {
 		return data;
 	};
 
-	Sandbox(that, callback);
+	this.callSuper(callback);
 };
+
+Controller.extends(Sandbox);
+
+return Controller;
 };

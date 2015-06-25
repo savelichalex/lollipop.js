@@ -1,11 +1,14 @@
 /* jshint node: true */
-module.exports = (function() {
+/*if(!Promise)*/ module.exports = (function() {
 'use strict';
-var Deferred, Promise,
-	Promisify,
+
+var Promise, 
+	_promise = {},
 	setImmediate;
 
-//shim
+/**
+ * Shim for setImmediate
+ */
 if(typeof setImmediate !== 'function') {
 	setImmediate = function(fn, data) {
 		process.nextTick(function() {
@@ -14,137 +17,127 @@ if(typeof setImmediate !== 'function') {
 	}
 }
 
-Promise = function(context) {
-	var promise = Object.create(Promise.prototype);
-
+/**
+ * Promise constructor
+ * mathces Promise/A+ specification
+ * @constructor
+ * @param {cb} Function; async func that need to resolve
+ * @param {context} Object; optional context for promise
+ */
+Promise = function(cb, context) {
+	var promise = Object.create(_promise.prototype),
+	context = context || {};
+		
 	promise.fulfilled = [];
 	promise.rejected = [];
-	promise.context = context;
+
+	var resolve = function(data) {
+		var self = promise;
+		self.data = data;
+		if(self.status === 'pending') {
+			self.status = 'resolved';
+			self.fulfilled.forEach(function(cb) {
+				self.execute(cb, data);
+			});
+		} else {
+			self.child_promise.resolve(data);
+		}
+	},
+	reject = function(error) {
+		var self = promise;
+		self.error = error;
+		if(self.status === 'pending') {
+			self.status = 'rejected';
+			self.rejected.forEach(function(cb) {
+				self.execute(cb, error);
+			});
+		} else {
+			self.child_promise.reject(error);
+		}
+	};
+
+	cb.call(context, resolve, reject);
 
 	return promise;
 };
 
-Promise.prototype = {
+_promise.prototype = {
 	fulfilled: null,
 	rejected: null,
+	child_promise: null,
 	status: 'pending',
 	error: null,
-	context: null,
+	data: null,
 	then: function(fulfill, reject) {
-		var defer = new Deferred();
-		this.fulfilled.push({
-			fn: fulfill,
-			defer: defer
-		});
-		if(reject) {
-			this.rejected.push({
-				fn: reject,
-				defer: defer
-			});
-		}
+		var promise = Object.create(_promise.prototype);
+		
+		promise.fulfilled = [];
+		promise.rejected = [];
+		promise.str = fulfill.toString();
+
+		this.child_promise = promise;
+		this.fulfilled.push(fulfill);
+		if (reject) this.rejected.push(reject);
 
 		if(this.status === 'resolved') {
-			this.execute({
-				fn: fulfill,
-				defer: defer
-			}, this.data);
+			this.execute(fulfill, this.data);
 		} else if(this.status === 'rejected') {
-			this.execute({
-				fn: reject,
-				defer: defer
-			}, this.error);
+			this.execute(reject, this.error);
 		}
 
-		return defer.promise;
+		return promise;
 	},
-	execute: function(obj, result) {
-		var that = this;
+	execute: function(cb, data) {
+		var self = this;
 		setImmediate(function() {
-			if(Object.prototype.toString.call(result) !== "[object Array]") {
+			if(Object.prototype.toString.call(data) !== '[object Array]') {
 				var tempArray = [];
-				tempArray.push(result)
-				result = tempArray;
+				tempArray.push(data);
+				data = tempArray;
 			}
-			var res = obj.fn.apply(that.context, result);
-			if(res instanceof Promise) {
-				obj.defer.bind(res);
+			var res = cb.apply({}, data);
+			if(res !== undefined && res.toString() === '[object Promise]') {
+				res.then(function() {
+					var args = Array.prototype.slice.call(arguments);
+					self.child_promise.resolve(args);
+				}, function(err) {
+					self.child_promise.reject(err);
+				});
 			} else {
-				if(obj.defer) {
-					obj.defer.resolve(res);
-				}
+				self.child_promise.resolve(res);
 			}
-		}, result);
+		}, data);
+
+		return this.child_promise;
 	},
-	deferred: function(callback) {
-		this.fulfilled.push({
-			fn: callback,
-			defer: void 0
-		});
+	resolve: function(data) {
+		var self = this;
+		this.data = data;
+		if(this.status === 'pending') {
+			this.status = 'resolved';
+			this.fulfilled.forEach(function(cb) {
+				self.execute(cb, data);
+			});
+		} else {
+			return;
+		}		
+	},
+	reject: function(error) {
+		var self = this;
+		this.error = error;
+		if(this.status === 'pending') {
+			this.status = 'rejected';
+			this.rejected.forEach(function(cb) {
+				self.execute(cb, data);
+			});
+		} else {
+			return;
+		}
 	},
 	toString: function() {
 		return '[object Promise]';
 	}
 };
 
-Deferred = function(context) {
-	var defer = Object.create(Deferred.prototype);
-
-	defer.promise = new Promise(context);
-	defer.promise.context = context || null;
-
-	return defer;
-};
-
-Deferred.prototype = {
-	promise: null,
-	resolve: function(data) {
-		var promise = this.promise;
-		promise.data = data;
-		promise.status = 'resolved';
-		promise.fulfilled.forEach(function(cb) {
-			promise.execute(cb, data);
-		});
-	},
-	reject: function(error) {
-		var promise = this.promise;
-		promise.error = error;
-		promise.status = 'rejected';
-		promise.rejected.forEach(function(cb) {
-			promise.execute(cb, error);
-		});
-	},
-	bind: function(promise) {
-		var self = this;
-		promise.then(function(res) {
-			self.resolve(res);
-		}, function(err) {
-			self.reject(err);
-		});
-	}
-};
-
-Promisify = function(asyncFn, context) {
-	return function() {
-		var defer = new Deferred(),
-			args = Array.prototype.slice.call(arguments);
-
-		args.push(function(err, val) {
-			if(err) {
-				defer.reject(err);
-			}
-
-			defer.resolve(val);
-		});
-
-		asyncFn.apply((context || {}), args);
-
-		return defer.promise;
-	}
-};
-
-return {
-	deferred: Deferred,
-	promisify: Promisify,
-	promise: Promise
-};
+return Promise;
 }());

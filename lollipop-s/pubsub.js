@@ -1,55 +1,67 @@
 /* jshint node: true */
 module.exports = (function() {
 'use strict';
-var q = require('./promise.js');
 
-var Pubsub = function(context) {
-	var context = context || null,
-		that = Object.create(Pubsub.prototype);
-
-	that.subscribers = {
+var Pubsub = function() {
+	var subscribers = {
 		any: []
-	};
-	that.context = context;
+	}
 
-	return that;
+	//Subscribers getters and setters
+	this.getSubscribers = function(type) {
+		return subscribers[type];
+	}
+
+	this.setClearSubscribersType = function(type) {
+		subscribers[type] = [];
+	}
+
+	this.addToSubscribers = function(type, data) {
+		subscribers[type].push(data);
+	}
+
+	this.subscriberActiveIterator = function(cb) {
+		for(i in subscribers) {
+			if(subscribers.hasOwnProperty(i)) {
+				cb.apply(this, i);
+			}
+		}
+	}
 };
 
 Pubsub.prototype = {
-	subscribe: function(type) {
-		var type = type || 'any',
-			defer = q.deferred(this.context);
-		if(typeof this.subscribers[type] === 'undefined') {
-			this.subscribers[type] = [];
+	constructor: Pubsub,
+	subscribe: function(type, cb) {
+		var type = type || 'any';
+		if(typeof this.getSubscribers(type) === 'undefined') {
+			this.setClearSubscribersType(type);
 		}
-		this.subscribers[type].push(defer);
-		return defer.promise;
+		this.addToSubscribers(type, cb);
+		
 	},
 
 	unsubscribe: function(id) {
 		var i, len, prop,
 			subscribers = this.subscribers;
-		for(i in subscribers) {
-			if(subscribers.hasOwnProperty(i)) {
-				if(i === id) {
-					subscribers[i] = [];
-				}
-			}
-		}
+		this.subscriberActiveIterator(function(i) {
+			if(i === id)
+				this.setClearSubscribersType(i);
+		}); //TODO test it
 	},
 
-	publish: function(publication, type) {
-		if(!this.subscribers[type]) return false;
+	publish: function(type, publication) {
+		if(!this.getSubscribers(type)) return false;
 
 		var type = type || 'any',
-			subscribers = this.subscribers[type],
+			subscribers = this.getSubscribers(type),
 			i, len = subscribers.length;
-		for(i = 0; i < len; i += 1) {
-			if(typeof publication === 'function') {
-				subscribers[i].resolve(publication());
-			} else {
-				subscribers[i].resolve(publication);
+		if(Object.prototype.toString.call(publication) !== '[object Array]') {
+				var tempArray = [];
+				tempArray.push(publication);
+				publication = tempArray;
 			}
+		for(i = 0; i < len; i += 1) {
+			subscribers[i].apply({}, publication);
 		}
 	}
 };

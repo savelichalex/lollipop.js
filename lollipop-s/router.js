@@ -1,17 +1,18 @@
 /* jshint node: true */
 module.exports = function(Sandbox, Mediator) {
 'use strict';
-return function Router(callback) {
+var utils = require('./utils.js');
+
+function Router(callback) {
 	if(!(this instanceof Router)) {
 		return new Router(callback);
 	}
 
-	var that = {},
-		routes = {},
+	var routes = {},
 		server = require('./server.js')(Mediator),
 		Server;
 
-	that.routes = {
+	this.routes = {
 		add: function(uri, callback) {
 			var actions = [], params = [],
 				len, handle,
@@ -59,12 +60,16 @@ return function Router(callback) {
 			}
 		}
 	};
-	that.route = that.routes.add;
+	this.route = this.routes.add;
 
-	that.startServer = function() {
+	this.startServer = function() {
 		Server = server(routes);
 	}
 
-	Sandbox(that, callback);
+	this.callSuper(callback);
 };
+
+Router.extends(Sandbox);
+
+return Router;
 };
