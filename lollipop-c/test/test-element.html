@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test page</title>
+	<style>
+	.red {
+		color: green;
+	}
+	</style>
+</head>
+<body>
+	<my-tag></my-tag>
+	<script src="../lollipop.js"></script>
+	<script src="../element.js"></script>
+	<script>
+	Lollipop.Element('my-tag', function() {
+		console.log('js into element');
+	});
+	Lollipop.Core.startAll();
+	</script>
+</body>
+</html>

@@ -90,6 +90,7 @@ Lollipop.Core = (function() {
 				case 'widget': m.instance = Widget(moduleId, m.deps, m.creator); break;
 				case 'module': m.instance = Module(moduleId, m.deps, m.creator); break;
 				case 'router': m.instance = Router(moduleId, m.deps, m.creator); break;
+				case 'element': m.instance = Element(moduleId, m.deps, m.creator); break;
 			}
 		}
 	};

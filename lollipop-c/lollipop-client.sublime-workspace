@@ -1,0 +1,1103 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"in",
+				"instance"
+			],
+			[
+				"head",
+				"HeaderController"
+			],
+			[
+				"for",
+				"form-sign-in"
+			],
+			[
+				"bo",
+				"box-sizing"
+			],
+			[
+				"o",
+				"offsetWidth"
+			],
+			[
+				"key",
+				"keypressFunc"
+			],
+			[
+				"new",
+				"new_input"
+			],
+			[
+				"re",
+				"removeChild"
+			],
+			[
+				"l-o",
+				"l-offset-mobile"
+			],
+			[
+				"error",
+				"errorDiv"
+			],
+			[
+				"insert",
+				"insertText"
+			],
+			[
+				"get",
+				"getChar"
+			],
+			[
+				"i",
+				"input"
+			],
+			[
+				"g",
+				"main_grey"
+			],
+			[
+				"_",
+				"_setUncheck"
+			],
+			[
+				"_se",
+				"_setCheck"
+			],
+			[
+				"ch",
+				"childsCount"
+			],
+			[
+				"parent",
+				"parentToChilds"
+			],
+			[
+				"label",
+				"LABEL"
+			],
+			[
+				"pa",
+				"parentToChilds"
+			],
+			[
+				"P",
+				"ParentNode"
+			],
+			[
+				"fn",
+				"function"
+			],
+			[
+				"set",
+				"setCheck"
+			],
+			[
+				"list",
+				"listNode"
+			],
+			[
+				"file",
+				"fieldsetArr"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"form_",
+				"form_font_blue"
+			],
+			[
+				"form",
+				"form_description__top"
+			],
+			[
+				"f",
+				"form_font_grey"
+			],
+			[
+				"co",
+				"counter_color"
+			],
+			[
+				"ma",
+				"main_grey"
+			],
+			[
+				"main",
+				"main_darkgrey"
+			],
+			[
+				"m",
+				"main_grey"
+			],
+			[
+				"l",
+				"l-offset"
+			],
+			[
+				"size",
+				"sizeof"
+			],
+			[
+				"len",
+				"length"
+			],
+			[
+				"Tab",
+				"TableRow"
+			],
+			[
+				"str",
+				"strcmp"
+			],
+			[
+				"T",
+				"TableRow"
+			],
+			[
+				"Table",
+				"TableRow"
+			],
+			[
+				"arr",
+				"arrLength"
+			],
+			[
+				"c",
+				"column_count"
+			],
+			[
+				"user",
+				"userpage"
+			],
+			[
+				"ar",
+				"articles"
+			],
+			[
+				"inner",
+				"innerHTML"
+			],
+			[
+				"con",
+				"console"
+			],
+			[
+				"src",
+				"srcElement"
+			],
+			[
+				"cu",
+				"currentHash"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"moda",
+				"modal-enter-form"
+			],
+			[
+				"pos",
+				"pos:r	position:relative"
+			],
+			[
+				"padding",
+				"padding-top"
+			],
+			[
+				"Be",
+				"aa_bebas_neue"
+			],
+			[
+				"artic",
+				"articles_arr"
+			],
+			[
+				"to",
+				"toString"
+			],
+			[
+				"aside",
+				"aside-description"
+			],
+			[
+				"po",
+				"position"
+			],
+			[
+				"class",
+				"className"
+			],
+			[
+				"wi",
+				"width"
+			],
+			[
+				"tr",
+				"transition"
+			],
+			[
+				"arti",
+				"article-wrap"
+			],
+			[
+				"art",
+				"article-wrap"
+			],
+			[
+				"clas",
+				"className"
+			],
+			[
+				"a",
+				"article"
+			],
+			[
+				"sta",
+				"static_part"
+			],
+			[
+				"nam",
+				"named_params_str"
+			],
+			[
+				"active",
+				"active-article"
+			],
+			[
+				"heda",
+				"header"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
+				"bor",
+				"border"
+			],
+			[
+				"border",
+				"border-active"
+			],
+			[
+				"margin",
+				"margin-right"
+			],
+			[
+				"O",
+				"OpenSans"
+			],
+			[
+				"u",
+				"uppercase"
+			],
+			[
+				"font",
+				"font-kerning"
+			],
+			[
+				"ca",
+				"callMethod"
+			],
+			[
+				"temp",
+				"tempArr"
+			],
+			[
+				"mo",
+				"mongoConnect"
+			],
+			[
+				"action",
+				"actionId"
+			],
+			[
+				"M",
+				"Mediator"
+			],
+			[
+				"p",
+				"promisify"
+			],
+			[
+				"find",
+				"findOne"
+			],
+			[
+				"pro",
+				"promisify"
+			],
+			[
+				"conn",
+				"connection"
+			],
+			[
+				"defe",
+				"deferred"
+			],
+			[
+				"de",
+				"deferred"
+			],
+			[
+				"proto",
+				"prototype"
+			],
+			[
+				"su",
+				"subscribe"
+			],
+			[
+				"pub",
+				"pubsub"
+			],
+			[
+				"http",
+				"http_method"
+			],
+			[
+				"image",
+				"image_container"
+			],
+			[
+				"item-edit",
+				"item-edit-image"
+			],
+			[
+				"fie",
+				"fileName"
+			],
+			[
+				"add",
+				"addListener"
+			],
+			[
+				"v",
+				"visible"
+			],
+			[
+				"item",
+				"item-edit-"
+			],
+			[
+				"s",
+				"subscribe"
+			],
+			[
+				"rege",
+				"regexp"
+			],
+			[
+				"act",
+				"actionId"
+			],
+			[
+				"ac",
+				"actionId"
+			],
+			[
+				"read",
+				"readFile"
+			],
+			[
+				"params",
+				"params_str"
+			],
+			[
+				"handle",
+				"handle_str"
+			],
+			[
+				"ob",
+				"observable"
+			],
+			[
+				"vi",
+				"ViewModel"
+			],
+			[
+				"sec",
+				"secViewModel"
+			],
+			[
+				"te",
+				"template"
+			],
+			[
+				"template",
+				"template_regexp"
+			],
+			[
+				"create",
+				"createNodes"
+			],
+			[
+				"render",
+				"renderTemplate"
+			],
+			[
+				"X",
+				"XMLHttpRequest"
+			],
+			[
+				"type",
+				"typeof"
+			],
+			[
+				"subsc",
+				"subscribers"
+			],
+			[
+				"sub",
+				"subscribers"
+			],
+			[
+				"call",
+				"callback"
+			],
+			[
+				"li",
+				"listeners"
+			],
+			[
+				"prop",
+				"property"
+			],
+			[
+				"View",
+				"ViewModel"
+			],
+			[
+				"eve",
+				"eventListeners"
+			],
+			[
+				"pu",
+				"publication"
+			],
+			[
+				"module",
+				"moduleId"
+			],
+			[
+				"stop",
+				"stopAll"
+			],
+			[
+				"start",
+				"startAll"
+			],
+			[
+				"R",
+				"RatingPhotos"
+			],
+			[
+				"modal",
+				"modal_template"
+			],
+			[
+				"Modal",
+				"ModalClose"
+			],
+			[
+				"nav",
+				"navToggle"
+			],
+			[
+				"err",
+				"error"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "element.js",
+			"settings":
+			{
+				"buffer_size": 941,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "test/my-tag-template.js",
+			"settings":
+			{
+				"buffer_size": 22,
+				"line_ending": "Unix",
+				"name": "<div>Test my-tag</div>"
+			}
+		},
+		{
+			"file": "test/test-element.html",
+			"settings":
+			{
+				"buffer_size": 327,
+				"line_ending": "Unix",
+				"name": "<!doctype html>"
+			}
+		},
+		{
+			"file": "sandbox.js",
+			"settings":
+			{
+				"buffer_size": 11187,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "lollipop.js",
+			"settings":
+			{
+				"buffer_size": 14540,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 400.0,
+		"last_filter": "Package Control: ",
+		"selected_items":
+		[
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"",
+				"Package Control: Install Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"live",
+				"LiveReload: Enable/disable plug-ins"
+			],
+			[
+				"l",
+				"LiveReload: Help"
+			],
+			[
+				"insa",
+				"Package Control: Install Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 457.0
+	},
+	"console":
+	{
+		"height": 146.0,
+		"history":
+		[
+			"a",
+			"a = 2",
+			"def a = 2",
+			"def test(n): return n",
+			"def test(n):",
+			"console.log(1)",
+			"ls",
+			"\"cmd\": [\"sass\", \"--update\", \"$file:${file_path}/../css/${file_base_name}.css\"]",
+			"\"cmd\": [\"sass\", \"--update\", \"$file:${file_path}/../${file_base_name}.css\"]",
+			"import urllib.request,os; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); open(os.path.join(ipp, pf), 'wb').write(urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ','%20')).read())"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/alexey/lollipop.js/lollipop-c",
+		"/home/alexey/lollipop.js/lollipop-c/depends",
+		"/home/alexey/lollipop.js/lollipop-c/test"
+	],
+	"file_history":
+	[
+		"/home/alexey/www/angular-test.dev/www/app/views/directives-templates/form-sign-in.html",
+		"/home/alexey/www/angular-test.dev/www/app/scripts/directives/form-sign-in.js",
+		"/home/alexey/www/angular-test.dev/www/app/scripts/controllers/main.js",
+		"/home/alexey/www/angular-test.dev/www/app/scripts/app.js",
+		"/home/alexey/www/angular-test.dev/www/app/scripts/controllers/headerController.js",
+		"/home/alexey/www/angular-test.dev/www/app/index.html",
+		"/home/alexey/www/angular-test.dev/www/app/scripts/assets/angular-routes.js",
+		"/home/alexey/www/angular-test.dev/www/package.json",
+		"/home/alexey/www/angular-test.dev/www/bower.json",
+		"/home/alexey/www/angular-test.dev/www/app/styles/main.css",
+		"/home/alexey/WebstormProjects/test_front/js/util.js",
+		"/home/alexey/WebstormProjects/test_front/index.html",
+		"/home/alexey/WebstormProjects/test_front/style.styl",
+		"/home/alexey/js/webcomponentsjs-0.7.0/webcomponents.js",
+		"/home/alexey/WebstormProjects/test_front/style.css",
+		"/home/alexey/js/polymer-starter-kit-1.0.2/README.md",
+		"/home/alexey/WebstormProjects/test_front/js/tagger.js",
+		"/home/alexey/WebstormProjects/test_front/tip.html",
+		"/home/alexey/WebstormProjects/test_front/tip.styl",
+		"/home/alexey/WebstormProjects/test_issue/style.styl",
+		"/home/alexey/WebstormProjects/test_issue/tip.html",
+		"/home/alexey/WebstormProjects/test_issue/index.html",
+		"/home/alexey/WebstormProjects/test_front/README.md",
+		"/home/alexey/WebstormProjects/test_issue/style.css",
+		"/home/alexey/WebstormProjects/test_issue/tree.html",
+		"/home/alexey/WebstormProjects/test_issue/js/tree.js",
+		"/home/alexey/WebstormProjects/test_issue/tree.js",
+		"/home/alexey/c++/table/parse.h",
+		"/home/alexey/c++/table/main.cpp",
+		"/home/alexey/c++/table/table.txt",
+		"/home/alexey/c++/table/table.cpp",
+		"/home/alexey/c++/table/table.h",
+		"/home/alexey/yii/framework/base/interfaces.php",
+		"/home/alexey/c++/table/parse.cpp",
+		"/home/alexey/c++/table/table.s",
+		"/home/alexey/thebesttraining/new_design/_fonts.scss",
+		"/home/alexey/thebesttraining/new_design/3-wave.html",
+		"/home/alexey/thebesttraining/new_design/jeet/_grid.scss",
+		"/home/alexey/thebesttraining/new_design/jeet/_functions.scss",
+		"/home/alexey/thebesttraining/new_design/Y-IkP6XE-7U.jpg",
+		"/home/alexey/thebesttraining/new_design/awesome/_variables.scss",
+		"/home/alexey/thebesttraining/new_design/awesome/font-awesome.scss",
+		"/home/alexey/css_frameworks_grid/jeet/index.scss",
+		"/home/alexey/css_frameworks_grid/jeet/_grid.scss",
+		"/home/alexey/css_frameworks_grid/jeet/_settings.scss",
+		"/home/alexey/css_frameworks_grid/jeet/_functions.scss",
+		"/home/alexey/MonCheri/app/views/admin.html",
+		"/home/alexey/MonCheri/app/views/admin_login.html",
+		"/home/alexey/MonCheri/app/views/index.html",
+		"/home/alexey/MonCheri/app/static/js/admin/login.js",
+		"/home/alexey/MonCheri/app/static/js/admin/logout.js",
+		"/home/alexey/MonCheri/vendor/js/cookie.js",
+		"/home/alexey/MonCheri/app/static/js/admin/router.js",
+		"/home/alexey/MonCheri/app/static/styles/style.css",
+		"/home/alexey/MonCheri/app/static/styles/scss/style.scss",
+		"/home/alexey/MonCheri/app/static/js/admin/nav.js",
+		"/home/alexey/MonCheri/vendor/js/lollipop.js",
+		"/home/alexey/MonCheri/app/router.js",
+		"/home/alexey/MonCheri/app/static/js/index/description.js",
+		"/home/alexey/MonCheri/app/static/js/index/router.js",
+		"/usr/lib/node_modules/lollipop/test_addon.cc",
+		"/usr/lib/node_modules/lollipop/bonding.gyp",
+		"/usr/lib/node_modules/lollipop/sandbox.js",
+		"/usr/lib/node_modules/lollipop/controller.js",
+		"/usr/lib/node_modules/lollipop/promise.js",
+		"/usr/lib/node_modules/lollipop/model.js",
+		"/usr/lib/node_modules/lollipop/pubsub.js",
+		"/usr/lib/node_modules/lollipop/mediator.js",
+		"/usr/lib/node_modules/lollipop/core.js",
+		"/usr/lib/node_modules/lollipop/server.js",
+		"/usr/lib/node_modules/lollipop/router.js",
+		"/usr/lib/node_modules/lollipop/module.js",
+		"/home/alexey/.config/sublime-text-3/Packages/JSHint Gutter/.jshintrc",
+		"/home/alexey/MonCheri/new/app/controllers/admin.js",
+		"/home/alexey/MonCheri/new/app/static/styles/style.css",
+		"/home/alexey/MonCheri/new/app/static/js/admin/router.js",
+		"/home/alexey/lollipop.js/lollipop-s/pubsub.js",
+		"/usr/lib/node_modules/lollipop/lollipop.js",
+		"/home/alexey/MonCheri/new/vendor/js/lollipop.js",
+		"/home/alexey/MonCheri/new/app/static/js/admin/items.js",
+		"/home/alexey/v8/src/json.js",
+		"/home/alexey/v8/benchmarks/crypto.js",
+		"/home/alexey/v8/benchmarks/base.js",
+		"/home/alexey/MonCheri/new/app/static/images/1396332836997png",
+		"/home/alexey/MonCheri/new/app/static/js/admin/description.js",
+		"/home/alexey/MonCheri/new/app/static/js/description.js",
+		"/home/alexey/MonCheri/new/app/static/js/router.js",
+		"/home/alexey/MonCheri/new/app/static/js/items.js",
+		"/home/alexey/jspatterns/framework/lollipop.js",
+		"/home/alexey/thebesttraining/thebesttraining_node/app/views/article.html",
+		"/usr/lib/node_modules/lollipop/index.js",
+		"/usr/bin/lollipop",
+		"/home/alexey/Загрузки/handlebars-v1.3.0.js",
+		"/home/alexey/MonCheri/router.js",
+		"/home/alexey/MonCheri/server.js",
+		"/home/alexey/.config/sublime-text-3/Packages/Terminal/Default (Linux).sublime-keymap",
+		"/home/alexey/jspatterns/framework/review.txt",
+		"/home/alexey/jspatterns/mediator/mediator.js",
+		"/home/alexey/jspatterns/mediator/index.html",
+		"/home/alexey/www/tt.my/www/static/css/sass/style.css",
+		"/home/alexey/.config/sublime-text-3/Packages/LiveStyle/LiveStyle.sublime-settings",
+		"/home/alexey/.config/sublime-text-3/Packages/User/LiveStyle.sublime-settings",
+		"/home/alexey/.config/sublime-text-3/Packages/JSHint Gutter/JSHint.sublime-settings",
+		"/home/alexey/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/alexey/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/home/alexey/uikit/index.html",
+		"/home/alexey/www/tt.my/www/application/controllers/api.php",
+		"/home/alexey/www/tt.my/www/application/config/autoload.php",
+		"/home/alexey/www/tt.my/www/index.php",
+		"/home/alexey/scala-first/frame.scala",
+		"/home/alexey/scala-first/hello.scala",
+		"/home/alexey/.profile",
+		"/home/alexey/testjs/app.html",
+		"/home/alexey/thebesttraining/the_best_training/app/views/users/new.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/users/edit.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/users/show.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/users/create.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/spec/requests/posts_controllers_spec.rb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/posts/aerobics.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/posts/training.html.erb",
+		"/home/alexey/thebesttraining/the_best_training/app/controllers/main_controller.rb",
+		"/home/alexey/thebesttraining/the_best_training/spec/requests/main_controllers_spec.rb",
+		"/home/alexey/thebesttraining/the_best_training/spec/spec_helper.rb",
+		"/home/alexey/thebesttraining/the_best_training/app/views/layouts/application.html.erb",
+		"/home/alexey/thebesttraining/thebesttraining/app/controllers/application_controller.rb",
+		"/home/alexey/www/doberman.dev/www/js/templates.js",
+		"/home/alexey/www/doberman.dev/www/test.php~",
+		"/home/alexey/www/test.dev/www/index.php"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 106.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"registerElement",
+			"form_description__top",
+			"box-sizing",
+			"#tt",
+			"console",
+			"box-sizing",
+			"д",
+			" \n",
+			"з",
+			"std",
+			"center",
+			"account",
+			".logo",
+			"ик",
+			"р",
+			"div",
+			"console",
+			"\"",
+			"console",
+			"Core",
+			"Framework",
+			"console",
+			"el",
+			"obj.View",
+			"success",
+			"prop",
+			"console",
+			"иыр",
+			"		",
+			"');\n",
+			"=\"\"></",
+			"layout",
+			"getLayoutPath",
+			"layout",
+			"_layoutPath",
+			"ц",
+			"w",
+			"year",
+			"}\n",
+			"gallery",
+			"6",
+			".}\n",
+			"Каталог",
+			"р",
+			"%;\n",
+			"др",
+			"%;",
+			"30",
+			"р",
+			"}\n",
+			"Виктория"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"p",
+			"Lollipop",
+			"error",
+			"id",
+			"g"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "element.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 941,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								746,
+								746
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "test/my-tag-template.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								22,
+								22
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<div>Test my-tag</div>",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "test/test-element.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 327,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								300,
+								300
+							]
+						],
+						"settings":
+						{
+							"auto_name": "<!doctype html>",
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "sandbox.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11187,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "lollipop.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14540,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5662,
+								5662
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7614.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 34.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 118.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "lollipop-client.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 209.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
